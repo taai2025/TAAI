@@ -1849,31 +1849,31 @@ function App() {
                       {hasLectures && `${subject.lectures.length} ${subject.lectures.length !== 1 ? 'lectures' : 'lecture'}`}
                     </div>
                   </div>
+                  {subject.groups && hasNotes && (
+                    <>
+                      <div className="subsection-header">Notes</div>
+                      <div className="notes-grid notes-grid--spaced">
+                        {subject.notes.map((note, i) => <NoteCard key={i} note={note} accent={subject.accent} color={subject.color} index={i} />)}
+                      </div>
+                    </>
+                  )}
                   {subject.groups ? subject.groups.map(g => {
-                    const gNotes = g.notes.length > 0, gLect = g.lectures.length > 0, gLabels = gNotes && gLect;
+                    // Notes sit above the groups (2026-11-15); a group heading covers its videos only.
+                    const gLect = g.lectures.length > 0;
                     return (
                       <details key={g.id} id={'grp-' + g.id} className="subject-group" open>
                         <summary className="subject-group-summary">
                           <span className="subject-group-title">{g.title}</span>
-                          <span className="subject-group-count">{(gNotes || gLect) ? [gNotes && `${g.notes.length} ${g.notes.length !== 1 ? 'notes' : 'note'}`, gLect && `${g.lectures.length} ${g.lectures.length !== 1 ? 'lectures' : 'lecture'}`].filter(Boolean).join(' · ') : 'Coming soon'}</span>
+                          <span className="subject-group-count">{gLect ? `${g.lectures.length} ${g.lectures.length !== 1 ? 'lectures' : 'lecture'}` : 'Coming soon'}</span>
                           <CopyLinkButton hash={g.id} label={g.title} />
                           <svg className="subject-group-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
                         </summary>
                         <div className="subject-group-body">
-                        {!gNotes && !gLect && (
+                        {!gLect && (
                           <div className="subject-group-empty">Lectures coming soon.</div>
-                        )}
-                        {gNotes && (
-                          <>
-                            {gLabels && <div className="subsection-header">Notes</div>}
-                            <div className={`notes-grid${gLect ? ' notes-grid--spaced' : ''}`}>
-                              {g.notes.map((note, i) => <NoteCard key={i} note={note} accent={subject.accent} color={subject.color} index={i} />)}
-                            </div>
-                          </>
                         )}
                         {gLect && (
                           <>
-                            {gLabels && <div className="subsection-header">Lectures</div>}
                             <div className="notes-grid">
                               {g.lectures.map((lec, i) => <LectureCard key={i} lecture={lec} accent={subject.accent} color={subject.color} index={i} />)}
                             </div>
