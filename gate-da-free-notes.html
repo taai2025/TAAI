@@ -1016,6 +1016,22 @@ html body .mobile-menu-contact {
 html body #root .note-card:hover:not(#_) { transform: none !important; translate: none !important; box-shadow: 4px 4px 0 #111 !important; filter: none !important; }
 html body #root .lecture-card:hover:not(#_) { transform: none !important; translate: none !important; box-shadow: 4px 4px 0 #111 !important; filter: none !important; }
 </style>
+<style>
+/* Resources: ML group headings as one clear collapsible bar (2026-11-15).
+   Was a yellow button-like tag with the chevron far away on the right. */
+html body #root .subject-group-summary:not(#_) { background: #fff; border: 3px solid var(--nb-ink); padding: 12px 14px 12px 18px; margin-bottom: 22px; gap: 14px; }
+html body #root .subject-group-summary:not(#_):hover { background: #FFF8DB; }
+html body #root .subject-group:not([open]) .subject-group-summary:not(#_) { margin-bottom: 0; }
+html body #root .subject-group-summary .subject-group-title:not(#_) { display: inline; background: none; border: 0; box-shadow: none; padding: 0; font-size: 19px; }
+html body #root .subject-group-count:not(#_) { color: #5b5470 !important; }
+html body #root .subject-group-summary .copy-link-btn:not(#_) { width: 30px; height: 30px; box-shadow: none; }
+html body #root .subject-group-chevron:not(#_) { width: 30px; height: 30px; padding: 5px; background: var(--nb-yellow); }
+html body #root .subject-group + .subject-group:not(#_) { border-top: 0; padding-top: 0; }
+@media (max-width: 600px) {
+  html body #root .subject-group-summary:not(#_) { padding: 10px 10px 10px 14px; row-gap: 4px; }
+  html body #root .subject-group-summary .subject-group-title:not(#_) { font-size: 15.5px; }
+}
+</style>
 </head>
 <body data-float-stack>
 <div id="root"></div>
@@ -1839,7 +1855,7 @@ function App() {
                       <details key={g.id} id={'grp-' + g.id} className="subject-group" open>
                         <summary className="subject-group-summary">
                           <span className="subject-group-title">{g.title}</span>
-                          <span className="subject-group-count">{gLect ? `${g.lectures.length} ${g.lectures.length !== 1 ? 'lectures' : 'lecture'}` : (gNotes ? `${g.notes.length} ${g.notes.length !== 1 ? 'notes' : 'note'}` : 'Coming soon')}</span>
+                          <span className="subject-group-count">{(gNotes || gLect) ? [gNotes && `${g.notes.length} ${g.notes.length !== 1 ? 'notes' : 'note'}`, gLect && `${g.lectures.length} ${g.lectures.length !== 1 ? 'lectures' : 'lecture'}`].filter(Boolean).join(' · ') : 'Coming soon'}</span>
                           <CopyLinkButton hash={g.id} label={g.title} />
                           <svg className="subject-group-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
                         </summary>
